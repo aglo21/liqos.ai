@@ -1,143 +1,308 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LIQOS - Institutional Liquidity On-Chain</title>
-    <meta name="description" content="Enabling Institutional Liquidity On-Chain">
-    
-    <!-- Fonts: Inter for that clean, institutional look -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Custom Styles for specific effects not in default Tailwind -->
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            /* Light grey background color base */
-            background-color: #f5f5f5;
-        }
+  <meta charset="UTF-8" />
+  <title>LIQOS – Institutional Liquidity On-Chain</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-        /* The Noise Texture - embedded SVG to ensure it works offline/single-file */
-        .bg-noise {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-            opacity: 0.6;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
-        }
+  <!-- Roboto: ExtraLight (100), Regular (400), Black (900) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;900&display=swap" rel="stylesheet">
 
-        /* Typography Styles */
-        .text-outline {
-            -webkit-text-stroke: 2px #1f2937; /* Dark gray outline */
-            color: transparent;
-        }
-        
-        /* Smooth Fade In Animation */
-        .fade-in-up {
-            animation: fadeInUp 1s ease-out forwards;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        
-        .delay-100 { animation-delay: 0.1s; }
-        .delay-200 { animation-delay: 0.2s; }
-        .delay-300 { animation-delay: 0.3s; }
+  <style>
+    :root {
+      --text-main: #ffffff;
+      --text-subtle: #d3d8f0;
+      --accent: #b1a4ff;
+    }
 
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        /* Glassmorphism for Nav (Optional, keeps it readable on scroll) */
-        .glass-nav {
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-        }
-    </style>
+    body {
+      min-height: 100vh;
+      font-family: "Roboto", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(1rem, 3vw, 1.75rem);
+      background: #000 url("bg1.png") center center / cover no-repeat fixed;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Slightly toned-down animated light layers over the background */
+    .bg-orbit {
+      position: fixed;
+      inset: -40%;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      filter: blur(16px);
+      z-index: 0;
+    }
+
+    .bg-orbit-1 {
+      background: radial-gradient(circle at 15% 25%, rgba(120, 117, 255, 0.9), transparent 60%);
+      opacity: 0.35;
+      animation: orbit-one 30s linear infinite;
+      transform-origin: 25% 40%;
+    }
+
+    .bg-orbit-2 {
+      background: radial-gradient(circle at 85% 75%, rgba(62, 215, 255, 0.85), transparent 60%);
+      opacity: 0.3;
+      animation: orbit-two 38s linear infinite;
+      transform-origin: 75% 70%;
+    }
+
+    /* Subtle animated grid glow */
+    .bg-grid {
+      position: fixed;
+      inset: -25%;
+      pointer-events: none;
+      background-image:
+        linear-gradient(120deg, rgba(173, 163, 255, 0.18) 1px, transparent 1px),
+        linear-gradient(-120deg, rgba(81, 226, 255, 0.14) 1px, transparent 1px);
+      background-size: 120px 120px;
+      mix-blend-mode: screen;
+      opacity: 0.18;
+      animation: grid-move 36s linear infinite;
+      z-index: 0;
+    }
+
+    @keyframes orbit-one {
+      0%   { transform: translate3d(0, 0, 0) scale(1); }
+      20%  { transform: translate3d(-10%, 5%, 0) scale(1.06); }
+      40%  { transform: translate3d(8%, 12%, 0) scale(1.1); }
+      60%  { transform: translate3d(14%, -8%, 0) scale(1.04); }
+      80%  { transform: translate3d(-8%, -14%, 0) scale(1.08); }
+      100% { transform: translate3d(0, 0, 0) scale(1); }
+    }
+
+    @keyframes orbit-two {
+      0%   { transform: translate3d(0, 0, 0) scale(1.04); }
+      20%  { transform: translate3d(8%, -14%, 0) scale(1.1); }
+      40%  { transform: translate3d(-14%, -5%, 0) scale(1.06); }
+      60%  { transform: translate3d(-10%, 14%, 0) scale(1.12); }
+      80%  { transform: translate3d(14%, 6%, 0) scale(1.07); }
+      100% { transform: translate3d(0, 0, 0) scale(1.04); }
+    }
+
+    @keyframes grid-move {
+      0% {
+        background-position: 0 0, 0 0;
+      }
+      100% {
+        background-position: 260px 260px, -260px -260px;
+      }
+    }
+
+    .hero-wrapper {
+      width: 100%;
+      max-width: 1400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      perspective: 1200px;
+    }
+
+    .hero-screen {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: transform 0.25s ease-out;
+      transform-style: preserve-3d;
+    }
+
+    /* Slightly softened light sweep across the glass panel */
+    .hero-screen::before {
+      content: "";
+      position: absolute;
+      inset: -25%;
+      background: linear-gradient(
+        120deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.3) 45%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      mix-blend-mode: screen;
+      opacity: 0;
+      transform: translateX(-90%) skewX(-14deg);
+      pointer-events: none;
+      animation: sweep 12s ease-in-out infinite;
+    }
+
+    @keyframes sweep {
+      0% {
+        transform: translateX(-100%) skewX(-14deg);
+        opacity: 0;
+      }
+      16% {
+        opacity: 0.0;
+      }
+      32% {
+        opacity: 0.35;
+      }
+      50% {
+        transform: translateX(70%) skewX(-14deg);
+        opacity: 0.22;
+      }
+      66% {
+        opacity: 0;
+      }
+      100% {
+        transform: translateX(110%) skewX(-14deg);
+        opacity: 0;
+      }
+    }
+
+    .hero-content {
+      max-width: 42rem;
+      padding: clamp(1rem, 3vw, 2rem);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      text-align: center;
+      text-shadow: 0 10px 30px rgba(0, 0, 0, 0.95);
+      transform: translateZ(40px);
+    }
+
+    .logo {
+      font-size: clamp(4.5rem, 11vw, 8.25rem);
+      letter-spacing: 0.01em; /* very close, like original */
+      text-transform: uppercase;
+      line-height: 1;
+      display: inline-flex;
+      align-items: baseline;
+      white-space: nowrap;
+    }
+
+    .logo-liq {
+      font-weight: 900; /* Roboto Black */
+    }
+
+    .logo-os {
+      font-weight: 100; /* Roboto ExtraLight */
+      margin-left: 0.02em; /* tiny gap between Q and O */
+    }
+
+    .tagline {
+      font-size: clamp(1.1rem, 2.1vw, 1.7rem);
+      font-weight: 400;
+      color: var(--text-subtle);
+      white-space: nowrap; /* keep on one line on desktop */
+    }
+
+    .divider {
+      width: 80px;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+    }
+
+    .contact {
+      margin-top: 0.45rem;
+      font-size: 0.95rem;
+      color: rgba(230, 234, 255, 0.95);
+    }
+
+    .contact a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 400;
+    }
+
+    .contact a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 900px) {
+      body {
+        background-attachment: scroll;
+      }
+
+      .tagline {
+        font-size: 1.05rem;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .logo {
+        font-size: 3.4rem;
+        letter-spacing: 0.008em;
+      }
+
+      .tagline {
+        white-space: normal; /* allow wrap on very small screens */
+      }
+    }
+  </style>
 </head>
-<body class="text-gray-800 antialiased selection:bg-gray-200 selection:text-black h-screen flex flex-col justify-between overflow-hidden">
+<body>
+  <!-- animated light layers -->
+  <div class="bg-orbit bg-orbit-1" aria-hidden="true"></div>
+  <div class="bg-orbit bg-orbit-2" aria-hidden="true"></div>
+  <div class="bg-grid" aria-hidden="true"></div>
 
-    <!-- Background Noise Layer -->
-    <div class="bg-noise"></div>
+  <main class="hero-wrapper" aria-labelledby="liqos-heading">
+    <section class="hero-screen" id="hero-screen">
+      <div class="hero-content">
+        <h1 id="liqos-heading" class="logo" aria-label="LIQOS">
+          <span class="logo-liq">LIQ</span><span class="logo-os">OS</span>
+        </h1>
 
-    <!-- Navigation -->
-    <header class="fixed w-full top-0 z-50 glass-nav transition-all duration-300">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <!-- Logo Top Left -->
-            <a href="#" class="text-xl font-bold tracking-tight text-gray-900 hover:opacity-70 transition-opacity">
-                LIQOS
-            </a>
+        <div class="divider" aria-hidden="true"></div>
 
-            <!-- Desktop Menu -->
-            <nav class="hidden md:flex items-center gap-8">
-                <a href="#" class="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">About Us</a>
-                <a href="#" class="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">Services</a>
-                <a href="#" class="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">Contact</a>
-                
-                <a href="#" class="ml-4 px-6 py-2.5 text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-800 transition-all shadow-sm hover:shadow-md active:scale-95">
-                    Sign Up
-                </a>
-            </nav>
+        <p class="tagline">
+          Institutional Liquidity On-Chain
+        </p>
 
-            <!-- Mobile Menu Button -->
-            <button class="md:hidden p-2 text-gray-600 hover:text-gray-900">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-                </svg>
-            </button>
-        </div>
-    </header>
+        <p class="contact">
+          For inquiries:
+          <a href="mailto:info@liqos.ai">info@liqos.ai</a>
+        </p>
+      </div>
+    </section>
+  </main>
 
-    <!-- Main Content -->
-    <main class="flex-grow flex flex-col items-center justify-center relative px-4">
-        
-        <!-- Center Logo Composition -->
-        <div class="text-center relative z-10">
-            <!-- The Big LIQOS Text -->
-            <div class="fade-in-up flex items-center justify-center leading-none select-none">
-                <!-- 'LIQ' - Bold and Solid -->
-                <span class="text-[15vw] md:text-[180px] font-black tracking-tighter text-gray-900">
-                    LIQ
-                </span>
-                <!-- 'OS' - Outlined (Hollow) -->
-                <span class="text-[15vw] md:text-[180px] font-black tracking-tighter text-outline ml-[-1vw] md:ml-[-10px]">
-                    OS
-                </span>
-            </div>
+  <script>
+    // Slightly toned-down 3D tilt effect on mouse move (desktop only)
+    (function () {
+      const screen = document.getElementById("hero-screen");
+      if (!screen || window.matchMedia("(pointer: coarse)").matches) return;
 
-            <!-- Subtitle -->
-            <h1 class="fade-in-up delay-200 mt-6 md:mt-2 text-lg md:text-2xl font-light text-gray-500 tracking-wide">
-                Enabling Institutional Liquidity On-Chain
-            </h1>
-        </div>
+      const strength = 8; // max degrees of tilt (reduced)
 
-        <!-- Decorative Subtle Graphic (Optional Center Placeholder) -->
-        <!-- This mimics the "box" icon seen in some variations, subtly placed behind or overlaid -->
-        <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03]">
-            <svg class="w-[80vw] h-[80vw] max-w-[500px] max-h-[500px]" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2L2 7l10 5 10-5-10-5zm0 9l2.5-1.25L12 8.5l-2.5 1.25L12 11zm0 2.5l-5-2.5-5 2.5L12 22l10-8.5-5-2.5-5 2.5z"/>
-            </svg>
-        </div>
+      function handleMove(e) {
+        const rect = screen.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 to 0.5
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
 
-    </main>
+        const rotateX = y * -strength;
+        const rotateY = x * strength;
 
-    <!-- Footer -->
-    <footer class="fade-in-up delay-300 w-full py-8 text-center relative z-10">
-        <a href="mailto:info@liqos.ai" class="text-sm font-light text-gray-400 hover:text-gray-900 transition-colors">
-            For inquiries: <span class="font-normal border-b border-gray-300 pb-0.5 hover:border-gray-900">info@liqos.ai</span>
-        </a>
-    </footer>
+        screen.style.transform =
+          "rotateX(" + rotateX.toFixed(2) + "deg) rotateY(" + rotateY.toFixed(2) + "deg)";
+      }
 
+      function resetTilt() {
+        screen.style.transform = "rotateX(0deg) rotateY(0deg)";
+      }
+
+      screen.addEventListener("mousemove", handleMove);
+      screen.addEventListener("mouseleave", resetTilt);
+    })();
+  </script>
 </body>
 </html>
